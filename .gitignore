@@ -1,0 +1,39 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Environment variables
+.env
+*.env
+
+# Data files
+data/
+!data/sample_docs/
+!data/sample_docs/.gitkeep
+
+# Model artifacts
+*.pt
+*.bin
+*.ckpt
+*.safetensors
+
+# Jupyter
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs and cache
+*.log
+.cache/
