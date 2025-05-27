@@ -1,72 +1,117 @@
 """
-Document ingestion module for extracting and chunking text from PDFs
+ingest.py
 
 Author: Lijo Raju
+Purpose: Extract text from PDF files and split into token-limited chunks for embedding.
+
+Usage:
+- Called via scripts/run_refresh.py to process PDF into chunked documents.
 """
 
-import os 
-import fitz
-from typing import List, Optional
+import logging
+import pickle
+from typing import List
+from pathlib import Path
+
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.schema import Document
+
+# Setup logging
+logging.basicConfig (
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+
+# Constants
+DOCS_PATH = Path("data/sample_docs")
+OUTPUT_PATH = Path("data/vectorstore/chunks.pkl")
+CHUNK_SIZE=1000
+CHUNK_OVERLAP=200
 
 
-def extract_text_from_pdf(file_path: str) -> str:
+def load_pdfs(directory: Path) -> List[str]:
     """
-    Extract raw text from a PDF file.
+    Loads and extracts text from PDF files in the specified directory.
 
     Args:
-        file_path (str): Path to the PDF file.
+        directory (Path): Path to the directory containing PDF files.
     
     Returns:
-        str: Extracted text from all pages.
+        List[str]: List of text documents extracted from each PDF.
     """
-    try:
-        with fitz.open(file_path) as doc:
-            text = ""
-            for page in doc:
-                text += page.get_text()
-        return text
-    except Exception as e:
-        print(f"❌ Failed to process {file_path}: {e}")
-        return ""
-    
-    
-def chunk_text(text: str,
-                chunk_size: int = 500,
-                chunk_overlap: int = 100) -> List[str]:
-    """
-    Split raw text into overlapping chunks by LangChain splitter.
-
-    Args:
-        text (str): The raw input text.
-        chunk_size (int): Maximum number of characters per chunk.
-        chunk_overlap (int): Overlap between chunks.
-
-    Returns:
-        List[str]: List of text chunks
-    """
-    splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size,
-                                              chunk_overlap=chunk_overlap,
-                                              separators=["\n\n", "\n", ".", "!", "?", " ", ""]
-                                              )
-    return splitter.split_text(text)
-
-
-def process_document(file_path: str) -> List[str]:
-    """
-    Complete pipeline: extract and chunk a single document.
-
-    Args:
-        file_path(str): Path to the document.
-    
-    Returns:
-        List[str]: List of text chunks.
-    """
-    raw_text = extract_text_from_pdf(file_path)
-    if not raw_text.strip():
-        print(f"⚠️ No contents extracted from: {file_path}")
+    if not directory.exists():
+        logging.error(f"Directory not found: {directory}")
         return []
     
-    chunks = chunk_text(raw_text)
-    print(f"✅ {file_path}: Extracted {len(chunks)} chunks.")
-    return chunks
+    documents = []
+    for file in directory.glob("*.pdf"):
+        try:
+            loader = PyPDFLoader(str(file))
+            pages = loader.load()
+            documents.extend(pages)
+            logging.info(f"Loaded {len(pages)} pages from {file.name}")
+        except Exception as e:
+            logging.error(f"Failed to load {file.name}: {e}")
+    
+    return documents
+    
+
+def chunk_documents(documents: List[str]) -> List[str]:
+    """
+    Split documents into overlapping chunks using RecursiveCharacterTextSplitter.
+
+    Args:
+        documents (List[str]): List of raw text documents.
+
+    Returns:
+        List[str]: List of token limited chunks. 
+    """
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=CHUNK_SIZE,
+        chunk_overlap=CHUNK_OVERLAP,
+        length_function=len
+    )
+
+    try:
+        chunks = splitter.split_documents(documents)
+        logging.info(f"Split into {len(chunks)} chunks.")
+        return chunks
+    except Exception as e:
+        logging.error(f"Failed to split documents: {e}")
+        return []
+
+
+def save_chunks(chunks: List[str], output_path: Path) -> None:
+    """
+    Save the list of chunks to disk using pickle.
+
+    Args:
+        chunks (List[str]): List of text chunks.
+        output_path (Path): Destination file path for pickle file.
+    """
+    try:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, "wb") as f:
+            pickle.dump(chunks, f)
+        logging.info(f"Saved {len(chunks)} chunks to {output_path}")
+    except Exception as e:
+        logging.error(f"Failed to save chunks: {e}")
+
+
+def run_ingestion() -> None:
+    """
+    End-to-end ingestion pipeline to extract, split, and save chunks from PDFs.
+    """
+    logging.info(f"Starting injection pipeline...")
+    docs = load_pdfs(DOCS_PATH)
+    if not docs:
+        logging.warning(f"No documents to process.")
+        return
+
+    chunks = chunk_documents(docs)
+    if not chunks:
+        logging.warning(f"No chunks to save.")
+        return
+    
+    save_chunks(chunks, OUTPUT_PATH)
+    logging.info(f"Ingestion pipeline completed.")
