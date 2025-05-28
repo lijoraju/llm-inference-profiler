@@ -23,7 +23,6 @@ logging.basicConfig(
 VECTORSTORE_DIR = "data/vectorstore/"
 CHUNKS_PATH = os.path.join(VECTORSTORE_DIR, "chunks.pkl")
 FAISS_PATH = os.path.join(VECTORSTORE_DIR, "faiss_index")
-INDEX_PKL_PATH = os.path.join(VECTORSTORE_DIR, "index.pkl")
 EMBED_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 
@@ -71,22 +70,18 @@ def embed_chunks(chunks: List[Document]) -> FAISS:
 
 
 
-def save_faiss_index(faiss_index: FAISS, index_dir: str, index_pkl_path: str) -> None:
+def save_faiss_index(faiss_index: FAISS, index_dir: str) -> None:
     """
     Save the FAISS index and metadata.
 
     Args:
         faiss_index (FAISS): FAISS index object.
         index_dir (str): Directory to save FAISS index.
-        index_pkl_path (str): Path to save metadata. 
     """
     os.makedirs(index_dir, exist_ok=True)
     try:
         faiss_index.save_local(folder_path=index_dir)
-        with open(index_pkl_path, "wb") as f:
-            pickle.dump(faiss_index.index_to_docstore_id, f)
         logging.info(f"Saved FAISS index to {index_dir}")
-        logging.info(f"Saved metadata to {index_pkl_path}")
     except Exception as e:
         logging.error("Error saving FAISS index or metadata.")
         raise e
@@ -99,5 +94,5 @@ def run_embedding_pipeline():
     logging.info("Starting embedding pipeline...")
     chunks = load_chunks(CHUNKS_PATH)
     faiss_index = embed_chunks(chunks)
-    save_faiss_index(faiss_index, FAISS_PATH, INDEX_PKL_PATH)
+    save_faiss_index(faiss_index, FAISS_PATH)
     logging.info("Embedding pipeline completed.")

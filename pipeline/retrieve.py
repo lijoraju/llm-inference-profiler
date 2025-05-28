@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 # Paths
 VECTORSTORE_DIR = "data/vectorstore"
 INDEX_FILE = os.path.join(VECTORSTORE_DIR, "faiss_index")
-METADATA_FILE = os.path.join(VECTORSTORE_DIR, "index.pkl")
 EMBED_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 
