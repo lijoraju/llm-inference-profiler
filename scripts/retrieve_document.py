@@ -1,11 +1,11 @@
 """
-test_retrieve.py
+retrieve_document.py
 
 Author: Lijo Raju
 Purpose: CLI to test document retrieval from FAISS vectorstore.
 
 Usage:
-    python scripts/test_retrieve.py --query "What is photosynthesis?"
+    python scripts/retrieve_document.py --query "What is photosynthesis?"
 """
 import sys
 import os

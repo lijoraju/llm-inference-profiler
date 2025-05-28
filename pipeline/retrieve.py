@@ -67,7 +67,7 @@ def retrieve_top_k(query: str, top_k: int = 3) -> List[Document]:
     retriever = load_retriever(top_k=top_k)
     try:
         logger.info(f"Retrieving top {top_k} documents for query: '{query}'")
-        docs = retriever.get_relevant_documents(query)
+        docs = retriever.invoke(query)
         return docs
     except Exception as e:
         logger.error(f"Error during retrieval: {e}")
