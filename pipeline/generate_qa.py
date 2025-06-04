@@ -1,3 +1,9 @@
+"""
+generate_qa.py
+
+Author: Lijo Raju
+Purpose: Generate synthetic QA pairs from text chunks using a Zephyr-like model.
+"""
 import json
 import logging
 from typing import List, Dict
