@@ -37,3 +37,6 @@ Thumbs.db
 # Logs and cache
 *.log
 .cache/
+
+# Outputs
+Outputs/
