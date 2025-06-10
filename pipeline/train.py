@@ -139,6 +139,7 @@ def run_training():
         trainer.train()
 
         logger.info("Saving model to %s", OUTPUT_DIR)
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
         model.save_pretrained(OUTPUT_DIR)
         tokenizer.save_pretrained(OUTPUT_DIR)
 
