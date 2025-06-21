@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environments
+.env
+.venv/
+env/
+venv/
+*.egg-info/
+
+# Cache
+*.log
+*.tmp
+*.bak
+*.swp
+.cache/
+.ipynb_checkpoints/
+
+# System
+.DS_Store
+
+# Data
+data/qa/
+data/finetune/
+data/sample_docs/
+outputs/
+*.gguf
+
+# Not needed in container
+*.pdf
+*.md
+test/
+tests/
