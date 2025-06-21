@@ -72,3 +72,23 @@ def retrieve_top_k(query: str, top_k: int = 3) -> List[Document]:
     except Exception as e:
         logger.error(f"Error during retrieval: {e}")
         raise
+
+
+def retrieve(retriever, query: str) -> List[Document]:
+    """
+    Retrieve top relevant documents for the given query.
+
+    Args:
+        retriever: FAISS retriever.
+        query (str): Input query string.
+
+    Return:
+        List[Document]: Retrieved documents with metadata.
+    """
+    try:
+        logger.info(f"Retrieving top relevant documents for query: '{query}'")
+        docs = retriever.invoke(query)
+        return docs
+    except Exception as e:
+        logger.error(f"Error during retrieval: {e}")
+        raise
