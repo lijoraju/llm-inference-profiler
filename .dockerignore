@@ -27,6 +27,8 @@ data/finetune/
 data/sample_docs/
 outputs/
 *.gguf
+*.pkl
+data/vectorstore/
 
 # Not needed in container
 *.pdf
