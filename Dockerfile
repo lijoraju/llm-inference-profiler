@@ -41,10 +41,10 @@ ENV LLAMA_CMAKE_ARGS='-DLLAMA_CUBLAS=off'
 RUN pip install llama-cpp-python --no-cache-dir
 
 # Make sure scripts are executable
-RUN chmod +x /app/start.sh
+RUN chmod +x start.sh
 
 # Expose FastAPI port
 EXPOSE 8000
 
 # Start server
-CMD ["/app/start.sh"]
+CMD ["start.sh"]
