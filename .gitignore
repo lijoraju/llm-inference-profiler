@@ -40,3 +40,6 @@ Thumbs.db
 
 # Outputs
 Outputs/
+
+# qlora model
+*.gguf
