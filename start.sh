@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # ----------------------------------------------------
 # Start script for EduRAG FastAPI backend (Docker)
 # Author: Lijo Raju
