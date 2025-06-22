@@ -35,3 +35,5 @@ data/vectorstore/
 *.md
 test/
 tests/
+
+.hf_cache/
