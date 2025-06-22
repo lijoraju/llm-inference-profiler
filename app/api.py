@@ -6,11 +6,10 @@ Purpose: FastAPI route definition for EduRAG backend.
          Exposes POST /query endpoint that accepts question and returns generated answer.
 """
 import logging
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
 from app.models.request_model import QueryRequest
 from app.models.response_model import QueryResponse
-from app.rag_engine import get_rag_engine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,19 +18,20 @@ router = APIRouter()
 
 
 @router.post("/query", response_model=QueryResponse)
-async def query_rag(request: QueryRequest) -> QueryResponse:
+async def query_rag(request_body: QueryRequest, request: Request) -> QueryResponse:
     """
     Endpoint to get LLM answer using RAG.
 
     Args:
-        request (QueryRequest): Input query and top_k value.
+        request_body (QueryRequest): Input query and top_k value.
+        reuest (Request): FastAPI request object with app state.
     
     Returns:
         QueryResponse:  Generated answer string.
     """
     try:
-        engine = get_rag_engine()
-        answer = engine.run(request.query)
+        engine = request.app.state.rag_engine
+        answer = engine.run(request_body.query)
         return QueryResponse(answer=answer)
     
     except Exception as e:
