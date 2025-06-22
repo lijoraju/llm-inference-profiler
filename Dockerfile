@@ -26,11 +26,10 @@ WORKDIR /app
 COPY . /app
 
 # Download model and index files from Hugging Face
-RUN mkdir -p /app/data/vectorstore/faiss_index && \\
-    curl -L https://huggingface.co/lijoraju/edurag-model/resolve/main/tinyllama-merged.gguf -o /app/tinyllama-merged.gguf && \\
-    curl -L https://huggingface.co/lijoraju/edurag-model/resolve/main/vectorstore/faiss_index/index.faiss -o /app/data/vectorstore/index.pkl && \\
+RUN mkdir -p /app/data/vectorstore/faiss_index && \
+    curl -L https://huggingface.co/lijoraju/edurag-model/resolve/main/tinyllama-merged.gguf -o /app/tinyllama-merged.gguf && \
+    curl -L https://huggingface.co/lijoraju/edurag-model/resolve/main/vectorstore/faiss_index/index.faiss -o /app/data/vectorstore/index.pkl && \
     curl -L https://huggingface.co/lijoraju/edurag-model/resolve/main/vectorstore/faiss_index/index.pkl -o /app/data/vectorstore/faiss_index/index.pkl
-
 
 # Install Python dependencies
 RUN pip install --upgrade pip
@@ -41,10 +40,10 @@ ENV LLAMA_CMAKE_ARGS='-DLLAMA_CUBLAS=off'
 RUN pip install llama-cpp-python --no-cache-dir
 
 # Make sure scripts are executable
-RUN chmod +x start.sh
+RUN chmod +x /app/start.sh
 
 # Expose FastAPI port
 EXPOSE 8000
 
 # Start server
-CMD ["start.sh"]
+CMD ["/app/start.sh"]
