@@ -42,6 +42,10 @@ RUN pip install llama-cpp-python --no-cache-dir
 # Make sure scripts are executable
 RUN chmod +x /app/start.sh
 
+# Set cache directories to a writable path inside the container
+ENV TRANSFORMERS_CACHE=/app/.hf_cache
+ENV HF_HOME=/app/.hf_cache
+
 # Expose FastAPI port
 EXPOSE 8000
 
