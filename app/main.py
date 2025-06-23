@@ -44,8 +44,3 @@ app = FastAPI(
 )
 
 app.include_router(api_router)
-
-@app.get("/")
-async def root():
-    """Health check endpoint."""
-    return {"status": "EduRAG backend is running..."}
