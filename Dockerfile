@@ -47,7 +47,7 @@ ENV TRANSFORMERS_CACHE=/app/.hf_cache
 ENV HF_HOME=/app/.hf_cache
 
 # Expose FastAPI port
-EXPOSE 8000
+EXPOSE 7860
 
 # Start server
 CMD ["/app/start.sh"]

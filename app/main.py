@@ -24,7 +24,7 @@ async def keep_alive():
     while True:
         try:
             async with httpx.AsyncClient() as client:
-                res = await client.get("http://localhost:8000/")
+                res = await client.get("http://localhost:7860/")
                 if res.status_code == 200:
                     logger.info(f"💓 Keep-alive ping successful")
         except Exception as e:
