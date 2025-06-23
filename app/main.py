@@ -4,6 +4,7 @@ main.py
 Author: Lijo Raju
 Purpose: FastAPI app entrypoint for EduRAG.
 """
+import contextlib
 import logging
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
@@ -39,6 +40,7 @@ async def lifespan(app: FastAPI):
     logger.info("Preloading RAG engine at startup...")
     app.state.rag_engine = get_rag_engine()
     logger.info("RAG engine preloaded successfully...")
+    keep_alive_task = asyncio.create_task(keep_alive())
     yield
     logger.info("Cleaning up RAG engine on application shutdown...")
     if hasattr(app.state.rag_engine, "close"):
@@ -49,6 +51,9 @@ async def lifespan(app: FastAPI):
             logger.error(f"Error during RAG engine cleanup: {e}", exc_info=True)
     else:
         logger.info("No specific cleanup method found for RAG engine.")
+    keep_alive_task.cancel()
+    with contextlib.suppress(asyncio.CancelledError):
+        await keep_alive_task
 
 
 app = FastAPI(
