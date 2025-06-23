@@ -7,6 +7,8 @@ Purpose: FastAPI app entrypoint for EduRAG.
 import logging
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+import asyncio
+import httpx
 
 from app.api import router as api_router 
 from app.rag_engine import get_rag_engine
@@ -14,6 +16,19 @@ from app.rag_engine import get_rag_engine
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+async def keep_alive():
+    """Periodically pings the server's root endpoint to keep it alive."""
+    await asyncio.sleep(5)
+    while True:
+        try:
+            async with httpx.AsyncClient() as client:
+                res = await client.get("http://localhost:8000/")
+                if res.status_code == 200:
+                    logger.info(f"💓 Keep-alive ping successful")
+        except Exception as e:
+            logger.warning(f"Keep-alive ping failed: {e}")
+        await asyncio.sleep(50)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
