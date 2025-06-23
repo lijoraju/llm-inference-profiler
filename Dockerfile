@@ -28,7 +28,7 @@ COPY . /app
 # Download model and index files from Hugging Face
 RUN mkdir -p /app/data/vectorstore/faiss_index && \
     curl -L https://huggingface.co/lijoraju/edurag-model/resolve/main/tinyllama-merged.gguf -o /app/tinyllama-merged.gguf && \
-    curl -L https://huggingface.co/lijoraju/edurag-model/resolve/main/vectorstore/faiss_index/index.faiss -o /app/data/vectorstore/index.pkl && \
+    curl -L https://huggingface.co/lijoraju/edurag-model/resolve/main/vectorstore/faiss_index/index.faiss -o /app/data/vectorstore/faiss_index/index.faiss && \
     curl -L https://huggingface.co/lijoraju/edurag-model/resolve/main/vectorstore/faiss_index/index.pkl -o /app/data/vectorstore/faiss_index/index.pkl
 
 # Install Python dependencies
