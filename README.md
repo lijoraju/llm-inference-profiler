@@ -78,9 +78,6 @@ curl -X POST http://localhost:7860/query \
     -d '{"query": "What is the importance of the Indian National Congress in India’s freedom struggle?"}'
 ```
 
-
----
-
 ## Training & Fine-Tuning
 
 - Dataset: 300+ QA pairs auto-generated from NCERT Class X chapters
@@ -112,9 +109,6 @@ Q: What is the role of the Constitution in a democracy?
 A: The Constitution lays down the framework of governance, ensures rights and justice, and acts as the guardian of democracy...
 ```
 
-
----
-
 ## Future Work
 - Add PDF ingestion interface
 - Extend to other subjects
@@ -125,3 +119,10 @@ A: The Constitution lays down the framework of governance, ensures rights and ju
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
+
+## 📢 Disclaimer
+
+This project uses publicly available NCERT Class 10 Social Science textbook content strictly for **educational and non-commercial** purposes. No part of the original textbook is redistributed or hosted in any form. The model has been trained on internally processed data derived from the textbook for the sole purpose of demonstrating a retrieval-augmented question-answering system. All QA pairs are **AI-generated** and **do not contain or replicate original NCERT text**.
+
+This repository is not affiliated with or endorsed by NCERT. If you are a representative of NCERT and believe there is a compliance issue, please contact me, and will promptly take corrective action.
+
