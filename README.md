@@ -1,9 +1,20 @@
 # Charitra: Retrieval-Based Q&A for High School Social Science Studies
+
+[![Hugging Face Space](https://img.shields.io/badge/Live%20Demo-HuggingFace-blue?logo=huggingface)](https://lijoraju-charitra-backend.hf.space/docs)
+[![Dockerized](https://img.shields.io/badge/Dockerized-%F0%9F%90%B3-blue)](https://www.docker.com/)
+[![LLM: TinyLlama](https://img.shields.io/badge/Model-TinyLlama--1.1B--Chat-blueviolet)](https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Built With FastAPI](https://img.shields.io/badge/Built%20With-FastAPI-green)](https://fastapi.tiangolo.com/)
+
+![QLoRA Fine-tuned](https://img.shields.io/badge/QLoRA-Fine--tuned-ff69b4?logo=pytorch)
+![Unit Tested](https://img.shields.io/badge/Tests-Passed-green?logo=pytest)
+[![Medium Article](https://img.shields.io/badge/Read%20More-Medium-000000?logo=medium)](https://github.com/lijoraju/charitra-qa)
+
 A lightweight, LLM-powered question answering system fine-tuned on NCERT Social Science texbooks using QLoRA and deployed via FastAPI + Docker.
 
 🛰️ Live Demo: [Charitra API on Hugging Face Spaces](https://lijoraju-charitra-backend.hf.space/docs)
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
@@ -16,13 +27,13 @@ A lightweight, LLM-powered question answering system fine-tuned on NCERT Social 
 - [Future Work](#future-work)
 - [License](#license)
 
-## 🧠 Overview
+## Overview
 
 **Charitra** is an open-source Retrieval-Augmented Generation (RAG) system designed to help high school students explore answers from *NCERT Class 10 Social Science* material. It uses a fine-tuned version of TinyLlama with QLoRA for domain adaptation and integrates with a FAISS-based semantic retriever.
 
 This project demonstrates how to build and deploy a low-latency, memory-efficient RAG system using open tools and modest compute.
 
-## ✨ Features
+## Features
 
 - 🔍 Top-k semantic retrieval using FAISS
 - 📖 Fine-tuned LLM using QLoRA on curated Q&A pairs
@@ -31,7 +42,7 @@ This project demonstrates how to build and deploy a low-latency, memory-efficien
 - 🐳 Dockerized for deployment on Hugging Face Spaces
 - 📁 Organized for extensibility and testing
 
-## 🏗️ Architecture
+## Architecture
 
 1. PDF NCERT textbook → Chunked & embedded
 2. FAISS vectorstore → stores semantic chunks
@@ -39,7 +50,7 @@ This project demonstrates how to build and deploy a low-latency, memory-efficien
 4. Chunks + query → Prompt to TinyLlama (QLoRA fine-tuned)
 5. Final answer → served via FastAPI
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - 🧠 LLM: [TinyLlama-1.1B-Chat](https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0)
 - 🔧 Fine-tuning: QLoRA + PEFT + bitsandbytes
@@ -48,7 +59,7 @@ This project demonstrates how to build and deploy a low-latency, memory-efficien
 - 🐳 Deployment: Docker + Hugging Face Spaces
 - 📦 Vectorstore: FAISS
 
-## 🧪 How to Run Locally
+## How to Run Locally
 
 ```bash
 # Clone the repo
@@ -70,14 +81,14 @@ curl -X POST http://localhost:7860/query \
 
 ---
 
-## 📌 Training & Fine-Tuning Summary
+## Training & Fine-Tuning
 
 - Dataset: 300+ QA pairs auto-generated from NCERT Class X chapters
 - Format: OpenChat-style JSON
 - Fine-tuning: 4-bit QLoRA on TinyLlama using `transformers` + PEFT
 - Output: GGUF quantized model for CPU-based inference
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 charitra/
@@ -91,7 +102,7 @@ charitra/
 └── requirements.txt
 ```
 
-## 📎 Sample Queries
+## Sample Queries
 
 ```bash
 Q: What were the causes of the Non-Cooperation Movement?
@@ -104,8 +115,13 @@ A: The Constitution lays down the framework of governance, ensures rights and ju
 
 ---
 
-## 📌 Future Work
+## Future Work
 - Add PDF ingestion interface
-- Extend to other subjects (Science, English, etc.)
-- Integrate with a frontend chatbot (Gradio or Telegram)
-- Enable multilingual answers using translation APIs
+- Extend to other subjects
+- Integrate with a frontend
+- Enable multilingual answers
+
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
