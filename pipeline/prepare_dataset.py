@@ -48,8 +48,8 @@ def format_for_instruction_tuning(qa_pairs: List[Dict[str, str]]) -> Dataset:
     formatted = []
     for qa in qa_pairs:
         formatted.append({
-            "instruction": "Answer the following question based on NCERT content.",
-            "input": qa["question"],
+            "instruction": "Answer the question based on the given context.",
+            "input": f"Context: {qa['context']}\n\nQuestion: {qa['question']}",
             "output": qa["answer"]
         })
     try:

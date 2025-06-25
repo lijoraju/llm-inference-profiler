@@ -88,16 +88,17 @@ def init_qa_generator(model_name: str = DEFAULT_MODEL):
         raise
 
 
-def extract_json_from_text(text: str) -> List[Dict[str, str]]:
+def extract_json_from_text(text: str, chunk: str) -> List[Dict[str, str]]:
     """
     Extract JSON list from generated text using regex to find valid JSON array.
     This version is more robust to conversational preambles.
 
     Args:
         text (str): Generated text containing a JSON array.
+        chunk (str): Context for which the text is generated.
 
     Returns:
-        List[Dict[str, str]]: Parsed QA pairs or empty list if parsing fails.
+        List[Dict[str, str]]: Parsed QA pairs with context or empty list if parsing fails.
     """
     try:
         # Step 1: Find the most likely JSON string within the text
@@ -125,6 +126,7 @@ def extract_json_from_text(text: str) -> List[Dict[str, str]]:
         for item in parsed_data:
             if isinstance(item, dict) and "question" in item and "answer" in item:
                 valid_pairs.append({
+                    "context": chunk,
                     "question": str(item["question"]).strip(),
                     "answer": str(item["answer"]).strip()
                 })
@@ -134,22 +136,23 @@ def extract_json_from_text(text: str) -> List[Dict[str, str]]:
     except json.JSONDecodeError as e:
         logger.warning("Failed to parse JSON: %s. Attempting heuristic extraction. Text: %s", e, text[:500])
         # Fallback to heuristic extraction if direct JSON parsing fails
-        return _heuristic_extract_qa(text)
+        return _heuristic_extract_qa(text, chunk)
     except Exception as e:
         logger.warning("Error extracting JSON: %s, Text: %s", e, text[:500])
         return []
 
 
-def _heuristic_extract_qa(text: str) -> List[Dict[str, str]]:
+def _heuristic_extract_qa(text: str, chunk: str) -> List[Dict[str, str]]:
     """
     Heuristically extracts Q&A pairs from text that didn't strictly follow JSON format
     but might have "Question: ... Answer: ..." patterns.
 
     Args:
         text (str): Generated text containing a JSON array.
+        chunk (str): Context for which the text is generated.
 
     Returns:
-        List[Dict[str, str]]: Parsed QA pairs or empty list if parsing fails.
+        List[Dict[str, str]]: Parsed QA pairs with context or empty list if parsing fails.
     """
     qa_pairs = []
     # Regular expression to find "Question: ... Answer: ..." patterns
@@ -160,7 +163,11 @@ def _heuristic_extract_qa(text: str) -> List[Dict[str, str]]:
         question = match.group(1).strip()
         answer = match.group(2).strip()
         if question and answer:
-            qa_pairs.append({"question": question, "answer": answer})
+            qa_pairs.append({
+                "context": chunk,
+                "question": question, 
+                "answer": answer
+            })
     if not qa_pairs:
         logger.warning("Heuristic extraction also failed to find Q&A pairs. Text: %s", text[:500])
 
@@ -205,7 +212,7 @@ def generate_qa_pairs(chunks: List[str], generator, tokenizer, num_pairs: int = 
             )
             if response and len(response) > 0:
                 response_text = response[0]["generated_text"]
-                extracted_pairs = extract_json_from_text(response_text)
+                extracted_pairs = extract_json_from_text(response_text, chunk)
                 qa_pairs.extend(extracted_pairs)
         except Exception as e:
             logger.warning(f"Failed to process chunk due to generation or extraction error: {e}")
