@@ -43,3 +43,7 @@ Outputs/
 
 # qlora model
 *.gguf
+
+# images
+*.png
+*.jpg
