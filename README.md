@@ -8,7 +8,7 @@
 
 ![QLoRA Fine-tuned](https://img.shields.io/badge/QLoRA-Fine--tuned-ff69b4?logo=pytorch)
 ![Unit Tested](https://img.shields.io/badge/Tests-Passed-green?logo=pytest)
-[![Medium Article](https://img.shields.io/badge/Read%20More-Medium-000000?logo=medium)](https://github.com/lijoraju/charitra-qa)
+[![Medium Article](https://img.shields.io/badge/Read%20More-Medium-000000?logo=medium)](https://medium.com/@lijoraju/charitra-a-small-conversational-q-a-system-for-class-x-social-science-textbook-1cc613a78ecd)
 
 A lightweight, LLM-powered question answering system fine-tuned on NCERT Social Science texbooks using QLoRA and deployed via FastAPI + Docker.
 
