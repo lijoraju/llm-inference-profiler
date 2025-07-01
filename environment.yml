@@ -3,24 +3,8 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - bzip2=1.0.8=h6c40b1e_6
-  - ca-certificates=2025.4.26=hbd8a1cb_0
-  - intel-openmp=2023.1.0=ha357a0b_43548
-  - libcxx=20.1.5=hf95d169_0
-  - libffi=3.4.4=hecd8cb5_1
-  - mkl=2023.1.0=h8e150cf_43560
-  - ncurses=6.4=hcec6c5f_0
-  - openssl=3.5.0=hc426f3f_1
-  - pip=25.1=pyhc872135_2
-  - python=3.10.16=hce00570_1
-  - readline=8.2=hca72f7f_0
-  - setuptools=78.1.1=py310hecd8cb5_0
-  - sqlite=3.45.3=h6c40b1e_0
-  - tbb=2021.8.0=ha357a0b_0
-  - tk=8.6.14=h4d00af3_0
-  - wheel=0.45.1=py310hecd8cb5_0
-  - xz=5.6.4=h46256e1_1
-  - zlib=1.2.13=h4b97444_1
+  - python=3.10
+  - pip
   - pip:
       - accelerate==1.7.0
       - aiofiles==24.1.0
