@@ -23,13 +23,12 @@ logging.basicConfig (
 )
 
 # Constants
-DOCS_PATH = Path("data/sample_docs")
 OUTPUT_PATH = Path("data/vectorstore/chunks.pkl")
 CHUNK_SIZE=1000
 CHUNK_OVERLAP=200
 
 
-def load_pdfs(directory: Path) -> List[str]:
+def load_pdfs(directory: Path) -> List[Document]:
     """
     Loads and extracts text from PDF files in the specified directory.
 
@@ -56,7 +55,7 @@ def load_pdfs(directory: Path) -> List[str]:
     return documents
     
 
-def chunk_documents(documents: List[str]) -> List[str]:
+def chunk_documents(documents: List[Document]) -> List[Document]:
     """
     Split documents into overlapping chunks using RecursiveCharacterTextSplitter.
 
@@ -81,7 +80,7 @@ def chunk_documents(documents: List[str]) -> List[str]:
         return []
 
 
-def save_chunks(chunks: List[str], output_path: Path) -> None:
+def save_chunks(chunks: List[Document], output_path: Path) -> None:
     """
     Save the list of chunks to disk using pickle.
 
@@ -98,12 +97,16 @@ def save_chunks(chunks: List[str], output_path: Path) -> None:
         logging.error(f"Failed to save chunks: {e}")
 
 
-def run_ingestion() -> None:
+def run_ingestion(path: str) -> None:
     """
     End-to-end ingestion pipeline to extract, split, and save chunks from PDFs.
+
+    Args:
+        path (str): Path to PDF documents directory.
     """
     logging.info(f"Starting injection pipeline...")
-    docs = load_pdfs(DOCS_PATH)
+    dir_path = Path(path)
+    docs = load_pdfs(dir_path)
     if not docs:
         logging.warning(f"No documents to process.")
         return
